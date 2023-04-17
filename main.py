@@ -15,7 +15,7 @@ if response.status_code == 200:
     # Raw data from the response
     data = response.json()
 
-    json_data = json.dumps(data, indent=2)
+    json_data = json.dumps(data)
     with open("raw.json", "w") as f:
         f.write(json_data)
 
