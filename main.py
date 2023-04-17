@@ -1,6 +1,7 @@
 import requests
 import json
-import pymysql
+import mysql.connector
+import numpy as np
 import pandas as pd
 
 # Define the API URL and parameters
@@ -11,10 +12,10 @@ response = requests.get(url)
 
 # Check the status code
 if response.status_code == 200:
-    # Extract the raw data from the response
+    # Raw data from the response
     data = response.json()
 
-    json_data = json.dumps(data, indent=4)
+    json_data = json.dumps(data, indent=2)
     with open("raw.json", "w") as f:
         f.write(json_data)
 
@@ -25,12 +26,11 @@ if response.status_code == 200:
     # Create a pandas DataFrame from the data
     json_data = json.dumps(json_obj, indent=4)
     df = pd.read_json(json_data)
-    df.reset_index(drop=True, inplace=True)
-    with open("data.json", "w") as f:
-        f.write(df.to_string())  
-
-    # Connect to the database
-    cnt = pymysql.connect(host="localhost", user="root", password="", db="json")
-    cursor = cnt.cursor()
+    df = pd.DataFrame(df["data"].to_list())
+    df = df.rename(columns={"ID Nation": "IDNation"})
+    df = df.rename(columns={"ID Year": "IDYear"})
+    df = df.rename(columns={"Slug Nation": "SlugNation"})
+    df.to_json("data.json", orient="records", indent=4)
+    
 else:
     print(response)
