@@ -14,7 +14,7 @@ sql = "CREATE TABLE Test (ID INT AUTO_INCREMENT PRIMARY KEY, IDNation VARCHAR(25
 # Execute the query to create the table
 cursor.execute(sql)
 
-# Commit the changes to the database
+# Commit the changes and close the connection
 cnx.commit()
 cursor.close()
 cnx.close()
